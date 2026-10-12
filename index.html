@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>หลักการนับเบื้องต้น | คณิตศาสตร์ ม.5</title>
+<style>
+:root{--navy:#172554;--blue:#2563eb;--sky:#dbeafe;--teal:#0f766e;--mint:#ccfbf1;--gold:#f59e0b;--ink:#172033;--muted:#64748b;--paper:#f8fafc;--line:#dbe3ef;--pink:#fce7f3}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#eff6ff,#f8fafc 50%,#ecfeff);font-family:Tahoma,"Noto Sans Thai",sans-serif;color:var(--ink);line-height:1.65}
+header{background:linear-gradient(120deg,#172554,#1d4ed8,#0f766e);color:white;padding:28px 18px 34px;text-align:center}
+header .tag{display:inline-block;background:#ffffff24;border:1px solid #ffffff50;border-radius:99px;padding:3px 13px;font-size:.9rem}
+h1{margin:10px 0 4px;font-size:clamp(1.6rem,4vw,2.5rem)}header p{margin:0 auto;max-width:800px;color:#e0f2fe}
+main{max-width:1150px;margin:-18px auto 40px;padding:0 16px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;background:white;padding:10px;border-radius:16px;box-shadow:0 8px 25px #0f172a12}
+.tab{border:0;border-radius:10px;background:#f1f5f9;color:#334155;padding:10px 15px;font-weight:bold;cursor:pointer}.tab.active{background:var(--navy);color:white}
+.panel{display:none;margin-top:16px}.panel.active{display:block}
+.card{background:white;border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0;box-shadow:0 8px 24px #0f172a0a}
+.card h2,.card h3{margin-top:0;color:var(--navy)}.lead{color:var(--muted);margin-top:-8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.control{background:#f8fafc;border:1px solid var(--line);padding:14px;border-radius:13px}
+label{font-weight:bold;display:block;margin-bottom:6px}input[type=range]{width:100%;accent-color:var(--blue)}select,button.action{font:inherit;padding:9px 12px;border:1px solid #cbd5e1;border-radius:9px;background:white;color:var(--ink)}button{cursor:pointer}
+.value{float:right;color:var(--blue);font-weight:bold}.statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:14px 0}
+.stat{background:#eff6ff;border-radius:12px;padding:12px;text-align:center}.stat strong{display:block;font-size:1.6rem;color:var(--blue)}
+.stat.teal{background:#f0fdfa}.stat.teal strong{color:var(--teal)}
+.example{background:#fffbeb;border-left:4px solid var(--gold);padding:12px 15px;border-radius:8px}
+.tree-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fbfdff;padding:10px;min-height:130px}
+.tree{display:flex;align-items:center;gap:10px;min-width:max-content;padding:10px}.level{display:flex;flex-direction:column;gap:8px;justify-content:center}
+.node{padding:6px 10px;border-radius:9px;background:#dbeafe;border:1px solid #93c5fd;text-align:center;font-size:.9rem;animation:pop .22s ease-out}.node.last{background:#ccfbf1;border-color:#5eead4}
+.branch{color:#94a3b8;font-size:1.25rem}@keyframes pop{from{opacity:.2;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.result-list{display:flex;gap:7px;flex-wrap:wrap}.pill{background:#f1f5f9;border:1px solid var(--line);border-radius:99px;padding:4px 10px;font-size:.88rem}.pill.excluded{text-decoration:line-through;opacity:.45;background:#fee2e2}
+.note{color:var(--muted);font-size:.92rem}.rule{padding:14px;border-radius:12px;background:#f8fafc;border:1px solid var(--line)}.rule b{color:var(--teal)}
+.quiz-q{padding:15px;border:1px solid var(--line);border-radius:13px;margin:12px 0;background:#fff}.quiz-q p{margin:0 0 9px;font-weight:bold}.quiz-q label{font-weight:normal;display:flex;gap:8px;align-items:flex-start;margin:6px 0;cursor:pointer}.quiz-q input{margin-top:6px;accent-color:var(--blue)}
+button.primary{background:var(--blue);color:white;border:0;border-radius:10px;padding:11px 17px;font-weight:bold}button.secondary{background:#e2e8f0;color:#1e293b;border:0;border-radius:10px;padding:10px 15px;font-weight:bold}
+.feedback{padding:12px;border-radius:10px;margin-top:12px;display:none}.good{background:#dcfce7;color:#166534}.bad{background:#fee2e2;color:#991b1b}
+footer{text-align:center;color:var(--muted);padding:20px;font-size:.9rem}
+@media(max-width:600px){.card{padding:15px}.tab{flex:1 1 42%}.tree{gap:5px}.node{padding:5px 7px}}
+</style>
+
+<style id="dashboard-redesign">
+:root{
+ --navy:#2f3542;--blue:#e9a900;--sky:#fff4c2;--teal:#d97706;--mint:#fff0d6;
+ --gold:#f5b400;--ink:#292d35;--muted:#8b909b;--paper:#f7f7f5;--line:#f0eee8;--pink:#fff0e8;
+}
+body{background:#f7f7f5;color:var(--ink);font-family:Tahoma,"Noto Sans Thai",sans-serif}
+header{
+ margin-left:208px;padding:25px 30px 22px;text-align:left;color:#282b32;
+ background:transparent;position:relative
+}
+header .tag{background:#fff1bf;border:0;color:#9a6900;font-weight:bold}
+header h1{font-size:clamp(1.55rem,3vw,2.1rem);margin:10px 0 3px;color:#272a31}
+header p{margin:0;color:#858995;max-width:760px}
+main{max-width:none;margin:0 22px 30px 230px;padding:0}
+.tabs{
+ position:fixed;z-index:10;left:14px;top:14px;bottom:14px;width:184px;
+ display:flex;flex-direction:column;align-items:stretch;gap:8px;
+ background:#fff;padding:20px 12px;border-radius:18px;box-shadow:0 6px 24px #2020200a;
+}
+.tabs:before{content:"COUNT LAB";display:block;color:#262a31;font-size:1.05rem;font-weight:900;letter-spacing:.4px;padding:5px 12px 24px}
+.tab{width:100%;text-align:left;border-radius:10px;padding:12px 13px;background:transparent;color:#8b909b;font-size:.92rem;font-weight:600;transition:.18s}
+.tab:before{display:inline-block;width:24px;color:#b5b8bf;font-weight:bold}
+.tab[data-tab="learn"]:before{content:"◈"}.tab[data-tab="lab"]:before{content:"⌘"}.tab[data-tab="quiz"]:before{content:"▤"}
+.tab.active{background:#f8b900;color:#fff;box-shadow:0 4px 10px #f8b90035}
+.tab.active:before{color:white}
+.panel{margin-top:10px}
+.card{border:0;border-radius:17px;padding:22px;background:#fff;box-shadow:0 5px 22px #20202008;margin:14px 0}
+.card h2,.card h3{color:#292d35}
+.card h2{font-size:1.25rem}
+.card h3{font-size:1.02rem}
+.grid{gap:16px}
+.rule{background:#fffaf0;border:1px solid #f8ebc7;border-radius:13px}
+.example{background:#fff8e6;border-left:4px solid #f5b400}
+.control{background:#fff;border:1px solid #f0eee8;border-radius:13px}
+input[type=range]{accent-color:#f5b400}
+.stat{background:#fff4c7}.stat strong{color:#d99000}
+.stat.teal{background:#fff0dc}.stat.teal strong{color:#d97706}
+.tree-wrap{background:#fffdf8;border-color:#f0eee8}
+.node{background:#fff0c2;border-color:#f7d56a;color:#795600}
+.node.last{background:#ffead5;border-color:#f5bd83;color:#8c4c09}
+.pill{background:#fff8e8;border-color:#f5e7c6}
+.pill.excluded{background:#fff0e8}
+button.primary{background:#f5b400;color:#332700;border-radius:10px;box-shadow:0 4px 10px #f5b40025}
+button.primary:hover{background:#e9a900}
+button.secondary{background:#f2f2ef}
+.quiz-q{border-color:#f0eee8;border-radius:13px}
+.feedback.good{background:#effaf1;color:#23733c}.feedback.bad{background:#fff0e8;color:#9a431c}
+footer{margin-left:208px}
+@media(max-width:760px){
+ header{margin-left:0;padding:24px 18px 18px}
+ main{margin:0 12px 24px;padding-top:0}
+ .tabs{position:sticky;top:8px;left:auto;bottom:auto;width:auto;flex-direction:row;flex-wrap:wrap;margin:0 0 14px;padding:8px;border-radius:14px}
+ .tabs:before{display:none}
+ .tab{width:auto;flex:1 1 30%;text-align:center;padding:10px 7px;font-size:.82rem}
+ .tab:before{width:auto;margin-right:5px}
+ footer{margin-left:0}
+ .card{padding:16px}
+}
+</style>
+
+</head>
+<body>
+<header>
+  <span class="tag">สื่อโต้ตอบ • คณิตศาสตร์ ม.5</span>
+  <h1>หลักการนับเบื้องต้น</h1>
+  <p>ทดลอง ปรับเงื่อนไข สังเกตแผนภาพต้นไม้ แล้วค้นพบว่าเมื่อใดควรใช้กฎการบวกหรือกฎการคูณ</p>
+</header>
+<main>
+  <nav class="tabs" aria-label="เมนูกิจกรรม">
+    <button class="tab active" data-tab="learn">1. เรียนรู้หลักการ</button>
+    <button class="tab" data-tab="lab">2. ห้องทดลอง</button>
+    <button class="tab" data-tab="quiz">3. แบบทดสอบ 10 ข้อ</button>
+  </nav>
+
+  <section class="panel active" id="learn">
+    <div class="card">
+      <h2>แนวคิดสำคัญ</h2>
+      <div class="grid">
+        <div class="rule"><h3>กฎการบวก</h3><p>ใช้เมื่อเลือกทำ <b>อย่างใดอย่างหนึ่ง</b> จากทางเลือกที่แยกจากกัน</p><p><math>m+n</math> วิธี</p><div class="example">ตัวอย่าง: เลือกเดินทางไปโรงเรียนได้โดยรถเมล์ 3 สาย <b>หรือ</b> รถตู้ 2 สาย รวม 3 + 2 = 5 วิธี</div></div>
+        <div class="rule"><h3>กฎการคูณ</h3><p>ใช้เมื่อทำงานเป็น <b>ขั้นตอนต่อเนื่องกัน</b> ทุกขั้นต้องเลือก</p><p><math>m\\times n</math> วิธี</p><div class="example">ตัวอย่าง: เสื้อ 3 ตัว และกางเกง 2 ตัว แต่งได้ 3 × 2 = 6 ชุด</div></div>
+      </div>
+      <p class="note">จำง่าย: “หรือ” มักชวนคิดถึงการบวก ส่วน “และ/ต่อจากนั้น” มักชวนคิดถึงการคูณ แต่ต้องตรวจสอบว่าสถานการณ์เป็นทางเลือกที่ไม่ซ้ำกันหรือเป็นขั้นตอนต่อเนื่องจริงหรือไม่</p>
+    </div>
+    <div class="card">
+      <h2>ลองคิดก่อนดูคำตอบ</h2>
+      <p>ร้านหนึ่งมีไอศกรีม 4 รส และท็อปปิง 3 แบบ ถ้าเลือกไอศกรีม 1 รสพร้อมท็อปปิง 1 แบบ จะเลือกได้กี่แบบ?</p>
+      <button class="primary" onclick="toggleHint()">แสดงคำใบ้ / เฉลย</button>
+      <div id="hint" class="example" hidden style="margin-top:12px">เป็นการเลือก 2 ขั้นตอนที่ต้องทำร่วมกัน จึงใช้กฎการคูณ: 4 × 3 = <b>12 แบบ</b></div>
+    </div>
+  </section>
+
+  <section class="panel" id="lab">
+    <div class="card">
+      <h2>ห้องทดลองการนับ</h2>
+      <p class="lead">สถานการณ์: ออกแบบชุดแต่งกายจากเสื้อ กางเกง และรองเท้า ปรับจำนวนตัวเลือกและข้อจำกัด แล้วสังเกตผลลัพธ์ที่เปลี่ยนแบบทันที</p>
+      <div class="grid">
+        <div class="control"><label for="shirts">จำนวนเสื้อ <span class="value" id="shirtsVal">3</span></label><input id="shirts" type="range" min="1" max="5" value="3"></div>
+        <div class="control"><label for="pants">จำนวนกางเกง <span class="value" id="pantsVal">2</span></label><input id="pants" type="range" min="1" max="5" value="2"></div>
+        <div class="control"><label for="shoes">จำนวนรองเท้า <span class="value" id="shoesVal">2</span></label><input id="shoes" type="range" min="1" max="4" value="2"></div>
+        <div class="control"><label for="limit">ข้อจำกัดเพิ่มเติม <span class="value" id="limitVal">0</span></label><input id="limit" type="range" min="0" max="8" value="0"><div class="note">จำนวนชุดที่ห้ามใช้ เช่น ชุดที่ไม่เหมาะกับกิจกรรม ระบบจะตัดชุดที่กำหนดออกจากรายการ</div></div>
+      </div>
+      <div class="statrow">
+        <div class="stat"><span>จำนวนชุดทั้งหมดก่อนจำกัด</span><strong id="total">12</strong></div>
+        <div class="stat teal"><span>จำนวนชุดที่ใช้ได้</span><strong id="valid">12</strong></div>
+        <div class="stat"><span>วิธีคิด</span><strong id="formula">3 × 2 × 2</strong></div>
+      </div>
+      <h3>แผนภาพต้นไม้ (ตัวอย่างเส้นทาง)</h3>
+      <div class="tree-wrap"><div id="tree" class="tree"></div></div>
+      <p class="note">เพื่อให้อ่านง่าย แสดงกิ่งของเสื้อทุกตัวและกางเกง/รองเท้าบางส่วนเมื่อจำนวนมากขึ้น ส่วนตัวเลขผลลัพธ์นับจากชุดทั้งหมดอย่างครบถ้วน</p>
+      <h3>ผลลัพธ์ที่เป็นไปได้</h3>
+      <div class="result-list" id="outcomes"></div>
+      <p id="cutNote" class="note"></p>
+      <div class="example"><b>สังเกต:</b> แต่ละชุดเกิดจากการเลือกเสื้อ <span id="sText">3</span> ทางเลือก แล้วเลือกกางเกง <span id="pText">2</span> ทางเลือก และรองเท้า <span id="shText">2</span> ทางเลือก จึงใช้กฎการคูณก่อนหักชุดที่ถูกจำกัด</div>
+    </div>
+    <div class="card">
+      <h2>เปรียบเทียบกฎการบวกกับกฎการคูณ</h2>
+      <div class="grid">
+        <div class="control"><label for="choiceA">ทางเลือกแบบ A (เช่น รถเมล์)</label><input id="choiceA" type="range" min="1" max="8" value="3"><span class="value" id="choiceAVal">3 วิธี</span></div>
+        <div class="control"><label for="choiceB">ทางเลือกแบบ B (เช่น รถตู้)</label><input id="choiceB" type="range" min="1" max="8" value="2"><span class="value" id="choiceBVal">2 วิธี</span></div>
+      </div>
+      <div class="statrow">
+        <div class="stat"><span>เลือก A หรือ B (บวก)</span><strong id="addResult">5</strong></div>
+        <div class="stat teal"><span>เลือก A และ B (คูณ)</span><strong id="mulResult">6</strong></div>
+      </div>
+      <p class="note">เปลี่ยนแถบเลื่อนและอธิบายด้วยคำพูดของตนเองว่าโจทย์จริงกำหนดให้เลือก “อย่างใดอย่างหนึ่ง” หรือ “ทำครบทั้งสองขั้นตอน”</p>
+    </div>
+  </section>
+
+  <section class="panel" id="quiz">
+    <div class="card">
+      <h2>แบบทดสอบท้ายกิจกรรม 10 ข้อ</h2>
+      <p class="lead">เลือกคำตอบให้ครบ แล้วกดตรวจคำตอบ ระบบจะแสดงคะแนนพร้อมเฉลยและคำอธิบาย</p>
+      <div id="questions"></div>
+      <button class="primary" onclick="gradeQuiz()">ตรวจคำตอบ</button>
+      <button class="secondary" onclick="resetQuiz()">เริ่มใหม่</button>
+      <div id="quizResult" class="feedback"></div>
+      <div id="answerKey" style="margin-top:12px"></div>
+    </div>
+  </section>
+</main>
+<footer>COUNT LAB • สื่อการเรียนรู้หลักการนับเบื้องต้น สำหรับนักเรียนชั้น ม.5</footer>
+<script>
+const $=id=>document.getElementById(id);
+document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{
+ document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b===btn));
+ document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===btn.dataset.tab));
+}));
+function toggleHint(){const h=$('hint');h.hidden=!h.hidden}
+['shirts','pants','shoes','limit','choiceA','choiceB'].forEach(id=>$(id).addEventListener('input',updateLab));
+function updateLab(){
+ const s=+$('shirts').value,p=+$('pants').value,sh=+$('shoes').value,lim=+$('limit').value;
+ $('shirtsVal').textContent=s;$('pantsVal').textContent=p;$('shoesVal').textContent=sh;$('limitVal').textContent=lim;
+ const combos=[];for(let a=1;a<=s;a++)for(let b=1;b<=p;b++)for(let c=1;c<=sh;c++)combos.push({a,b,c,label:`เสื้อ ${a} • กางเกง ${b} • รองเท้า ${c}`});
+ const actualLimit=Math.min(lim,Math.max(0,combos.length-1));
+ const excluded=new Set(combos.slice(Math.max(0,combos.length-actualLimit)).map(x=>x.label));
+ const valid=combos.filter(x=>!excluded.has(x.label));
+ $('total').textContent=combos.length;$('valid').textContent=valid.length;$('formula').textContent=`${s} × ${p} × ${sh}`;
+ $('sText').textContent=s;$('pText').textContent=p;$('shText').textContent=sh;
+ $('outcomes').innerHTML='';
+ const show=combos.slice(0,Math.min(40,combos.length));
+ show.forEach(x=>{const el=document.createElement('span');el.className='pill'+(excluded.has(x.label)?' excluded':'');el.textContent=x.label;$('outcomes').appendChild(el)});
+ if(combos.length>40){const el=document.createElement('span');el.className='pill';el.textContent=`… อีก ${combos.length-40} ชุด`;$('outcomes').appendChild(el)}
+ $('cutNote').textContent=actualLimit?`ตัดชุดที่กำหนดออก ${actualLimit} ชุด (แสดงเป็นรายการขีดฆ่า)`: 'ยังไม่มีข้อจำกัด จึงนับได้ครบทุกชุด';
+ // Compact tree: one branch per shirt, then examples of pants and shoes.
+ const tree=$('tree');tree.innerHTML='';
+ const l1=document.createElement('div');l1.className='level';l1.innerHTML='<div class="node">เริ่มต้น</div>';tree.appendChild(l1);
+ const arrow1=document.createElement('div');arrow1.className='branch';arrow1.textContent='→';tree.appendChild(arrow1);
+ const l2=document.createElement('div');l2.className='level';
+ for(let a=1;a<=s;a++){let n=document.createElement('div');n.className='node';n.textContent=`เสื้อ ${a}`;l2.appendChild(n)}tree.appendChild(l2);
+ const arrow2=document.createElement('div');arrow2.className='branch';arrow2.textContent='→';tree.appendChild(arrow2);
+ const l3=document.createElement('div');l3.className='level';
+ for(let a=1;a<=Math.min(s,3);a++){for(let b=1;b<=p;b++){let n=document.createElement('div');n.className='node';n.textContent=`ส${a}–ก${b}`;l3.appendChild(n)}}tree.appendChild(l3);
+ const arrow3=document.createElement('div');arrow3.className='branch';arrow3.textContent='→';tree.appendChild(arrow3);
+ const l4=document.createElement('div');l4.className='level';
+ for(let a=1;a<=Math.min(s,2);a++)for(let b=1;b<=Math.min(p,2);b++)for(let c=1;c<=sh;c++){let n=document.createElement('div');n.className='node last';n.textContent=`ส${a}–ก${b}–ร${c}`;l4.appendChild(n)}
+ if(s>2||p>2){let n=document.createElement('div');n.className='node';n.textContent='…';l4.appendChild(n)}tree.appendChild(l4);
+ const A=+$('choiceA').value,B=+$('choiceB').value;$('choiceAVal').textContent=A+' วิธี';$('choiceBVal').textContent=B+' วิธี';$('addResult').textContent=A+B;$('mulResult').textContent=A*B;
+}
+const qs=[
+ {q:'1. มีเส้นทางไปห้องสมุด 4 เส้นทาง หรือไปโรงอาหาร 3 เส้นทาง โดยเลือกไปเพียงแห่งเดียว รวมกี่วิธี?',o:['7 วิธี','12 วิธี','4 วิธี','1 วิธี'],a:0,e:'เลือกอย่างใดอย่างหนึ่งและนับแยกกัน จึงใช้กฎการบวก 4 + 3 = 7'},
+ {q:'2. มีเสื้อ 5 ตัวและกางเกง 2 ตัว จะแต่งกายโดยเลือกเสื้อ 1 ตัวกับกางเกง 1 ตัวได้กี่ชุด?',o:['7 ชุด','10 ชุด','3 ชุด','25 ชุด'],a:1,e:'เลือกครบสองขั้นตอน จึงใช้กฎการคูณ 5 × 2 = 10'},
+ {q:'3. ร้านมีข้าว 3 เมนูและก๋วยเตี๋ยว 4 เมนู ถ้าสั่งอาหารจานหลักเพียงอย่างเดียวได้กี่ทางเลือก?',o:['12','7','1','24'],a:1,e:'เลือกข้าวหรือก๋วยเตี๋ยวอย่างใดอย่างหนึ่ง จึงได้ 3 + 4 = 7'},
+ {q:'4. รหัสประกอบด้วยตัวอักษร 1 ตัวจาก 4 ตัวเลือก ตามด้วยตัวเลข 1 ตัวจาก 6 ตัวเลือก สร้างรหัสได้กี่รหัส?',o:['10','24','46','20'],a:1,e:'เป็นการเลือกสองตำแหน่งต่อเนื่องกัน จึงได้ 4 × 6 = 24'},
+ {q:'5. การโยนเหรียญ 1 เหรียญและทอยลูกเต๋า 1 ลูก มีผลลัพธ์ทั้งหมดกี่แบบ?',o:['2 + 6 = 8','2 × 6 = 12','6 − 2 = 4','6 แบบ'],a:1,e:'ผลของเหรียญและลูกเต๋าเกิดร่วมกันได้ จึงใช้กฎการคูณ 2 × 6 = 12'},
+ {q:'6. เลือกเครื่องดื่ม 3 ชนิด หรือขนม 5 ชนิด โดยเลือกเพียงรายการเดียว มีทั้งหมดกี่ทางเลือก?',o:['15','8','2','35'],a:1,e:'เป็นทางเลือกแบบใดแบบหนึ่ง จึงใช้กฎการบวก 3 + 5 = 8'},
+ {q:'7. ร้านมีพิซซ่า 4 หน้า และเลือกขนาดได้ 3 ขนาด ถ้าเลือกหน้าและขนาดอย่างละหนึ่ง จะได้กี่แบบ?',o:['7','12','4','64'],a:1,e:'เลือกหน้าและขนาดเป็นขั้นตอนต่อเนื่อง 4 × 3 = 12'},
+ {q:'8. มีเสื้อ 3 ตัว กางเกง 2 ตัว รองเท้า 2 คู่ หากห้ามใช้ชุดหนึ่งชุด จะเหลือกี่ชุด?',o:['12','11','7','6'],a:1,e:'ก่อนจำกัดมี 3 × 2 × 2 = 12 ชุด เมื่อตัดออก 1 ชุด เหลือ 11 ชุด'},
+ {q:'9. ข้อใดเหมาะกับการใช้กฎการคูณมากที่สุด?',o:['เลือกชา หรือกาแฟ 1 อย่าง','เลือกเส้นทาง A หรือ B','เลือกเสื้อ 1 ตัวและกางเกง 1 ตัว','เลือกวิชาเลือกเพียง 1 วิชา'],a:2,e:'การเลือกเสื้อและกางเกงเป็นการเลือกหลายขั้นตอนที่ต้องทำร่วมกัน'},
+ {q:'10. ถ้ามีทางเลือกขั้นแรก 2 วิธี ขั้นที่สอง 3 วิธี และขั้นที่สาม 4 วิธี จำนวนผลลัพธ์ทั้งหมดคือเท่าใด?',o:['9','14','24','12'],a:2,e:'ใช้กฎการคูณ 2 × 3 × 4 = 24 ผลลัพธ์'}
+];
+function renderQuiz(){
+ $('questions').innerHTML=qs.map((q,i)=>`<div class="quiz-q" id="q${i}"><p>${q.q}</p>${q.o.map((op,j)=>`<label><input type="radio" name="q${i}" value="${j}"><span>${String.fromCharCode(97+j)}. ${op}</span></label>`).join('')}<div class="note" id="fb${i}"></div></div>`).join('');
+}
+function gradeQuiz(){
+ let score=0;let all=true;
+ qs.forEach((q,i)=>{const chosen=document.querySelector(`input[name="q${i}"]:checked`);const fb=$('fb'+i);if(!chosen){all=false;fb.textContent='ยังไม่ได้ตอบข้อนี้';fb.style.color='#b45309'}else if(+chosen.value===q.a){score++;fb.textContent='ถูกต้อง ✓';fb.style.color='#15803d'}else{fb.textContent='ยังไม่ถูก ลองอ่านเฉลยด้านล่าง';fb.style.color='#b91c1c'}});
+ const box=$('quizResult');box.style.display='block';box.className='feedback '+(score>=7?'good':'bad');box.textContent=`คะแนน ${score}/10${all?'':' (มีข้อที่ยังไม่ได้ตอบ)'}`;
+ $('answerKey').innerHTML='<h3>เฉลยพร้อมเหตุผล</h3>'+qs.map((q,i)=>`<div class="rule" style="margin:8px 0"><b>${i+1}. ${q.o[q.a]}</b><br>${q.e}</div>`).join('');
+}
+function resetQuiz(){renderQuiz();$('quizResult').style.display='none';$('answerKey').innerHTML=''}
+renderQuiz();updateLab();
+</script>
+</body>
+</html>
